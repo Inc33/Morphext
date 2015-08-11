@@ -19,7 +19,8 @@
 
     var pluginName = "Morphext",
         defaults = {
-            animation: "bounceIn",
+            animationIn: "bounceIn",
+            animationOut: "bounceOut",
             separator: ",",
             speed: 2000,
             complete: $.noop
@@ -49,12 +50,16 @@
             this.start();
         },
         animate: function () {
-            this.index = ++this.index % this.phrases.length;
-            this.element[0].innerHTML = "<span class=\"animated " + this.settings.animation + "\">" + this.phrases[this.index] + "</span>";
+            this.element[0].firstChild.className = this.element[0].firstChild.className + ' ' + this.settings.animationOut;
+            var that = this;
+            setTimeout(function(){
+                that.index = ++that.index % that.phrases.length;
+                that.element[0].innerHTML = "<span class=\"animated " + that.settings.animationIn + "\">" + that.phrases[that.index] + "</span>";
 
-            if ($.isFunction(this.settings.complete)) {
-                this.settings.complete.call(this);
-            }
+                if ($.isFunction(that.settings.complete)) {
+                    that.settings.complete.call(that);
+                }
+            }, 500);
         },
         start: function () {
             var $that = this;
